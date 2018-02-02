@@ -1,0 +1,30 @@
+{
+  "name": "poster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "devin",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-clean-css": "^3.9.2",
+    "gulp-compass": "^2.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-html-minify": "0.0.14",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-jshint": "^2.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-rev": "^8.1.1",
+    "gulp-rev-collector": "^1.2.4",
+    "gulp-tinypng-nokey": "^1.1.0",
+    "gulp-uglify": "^3.0.0"
+  },
+  "dependencies": {
+    "jshint": "^2.9.5",
+    "ruby": "^0.6.1"
+  }
+}

@@ -1,0 +1,54 @@
+.dnSlide-main {
+  position: relative;
+  width: 800px;
+  height: 234px;
+  margin: 0px auto;
+  visibility: hidden;
+}
+.dnSlide-main.done {
+  visibility: visible;
+}
+.dnSlide-main a, .dnSlide-main img {
+  display: block;
+  border: 0px;
+}
+.dnSlide-main .dnSlide-list {
+  width: 800px;
+  height: 234px;
+  list-style: none;
+}
+.dnSlide-main .dnSlide-btn {
+  color: black;
+  height: 234px;
+  width: 100px;
+  opacity: 0.5;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  transition: opacity 0.3s;
+  z-index: 10;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.dnSlide-main .dnSlide-btn:hover {
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+.dnSlide-main.dnSlide-hide {
+  display: none;
+}
+.dnSlide-main .dnSlide-item {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.dnSlide-main .dnSlide-left-btn {
+  background-image: url("../images/left.png");
+  left: 0;
+}
+.dnSlide-main .dnSlide-right-btn {
+  background-image: url("../images/right.png");
+  right: 0;
+  left: auto;
+}

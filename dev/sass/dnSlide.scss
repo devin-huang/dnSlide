@@ -1,0 +1,89 @@
+$zero : 0px;
+$wid  : 800px;
+$hei  : 234px;
+$btn-hover : .5 .8; 
+$display   : block none ;
+
+@mixin direction($dir){
+  position:$dir;
+  @if($dir == absolute){
+    top:$zero;
+    left: $zero;
+  }
+}
+
+@mixin bgImgSet(){
+  z-index:10;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+@mixin animate($opacity , $time){
+  transition: $opacity $time; 
+}
+
+.dnSlide-main{
+
+  @include direction(relative);
+  width:$wid;
+  height: $hei;
+  margin: 0px auto;
+  visibility: hidden;
+
+  &.done{
+    visibility: visible;
+  }
+
+  a{
+    display: nth($display,1);
+    border:0px;
+  }
+
+  img{
+    @extend a;
+  }
+
+  .dnSlide-list{
+    width:$wid;
+    height: $hei;   
+    list-style:none;
+  }
+
+  .dnSlide-btn{
+    color:black;
+    height: $hei;
+    width:100px;
+    opacity : nth($btn-hover,1);
+    @include direction(absolute);
+    @include animate(opacity,.3s);
+    @include bgImgSet();
+
+    &:hover{
+      opacity : nth($btn-hover,2);
+      @include animate(opacity,.3s);
+    }
+
+  }
+
+  &.dnSlide-hide{
+    display: nth($display,2);
+  }
+
+  .dnSlide-item{
+    @include direction(absolute);
+  }
+
+  $btn-dir:left, right;
+  @each $dir in $btn-dir{
+    .dnSlide-#{$dir}-btn{
+      background-image: url('../images/#{$dir}.png');
+      @if( $dir == left){
+        left:0;
+      }@else{
+        right:0;
+        left:auto;
+      }
+    }
+  }
+}

@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <link rel="stylesheet" type="text/css" href="css/dnSlide.css">
+    <body>
+    <div class='dnSlide-main'>
+        <img src="images/1.jpg" width="100%">
+        <img src="images/2.jpg" width="100%">
+        <img src="images/3.jpg" width="100%">
+        <img src="images/4.jpg" width="100%">
+        <img src="images/5.jpg" width="100%">
+        <img src="images/6.jpg" width="100%">
+        <img src="images/7.jpg" width="100%">
+    </div>
+    <button class="show" type="button">显示</button>
+    <button class="hide" type="button">隐藏</button>
+
+     <div class='dnSlide-main'>
+        <img src="images/lol-1.jpg" width="100%">
+        <img src="images/lol-2.jpg" width="100%">
+        <img src="images/lol-3.jpg" width="100%">
+        <img src="images/lol-4.jpg" width="100%">
+        <img src="images/lol-5.jpg" width="100%">
+        <img src="images/lol-6.jpg" width="100%">
+        <img src="images/lol-1.jpg" width="100%">
+        <img src="images/lol-2.jpg" width="100%">
+        <img src="images/lol-3.jpg" width="100%">
+        <img src="images/lol-4.jpg" width="100%">
+        <img src="images/lol-5.jpg" width="100%">
+        <img src="images/lol-6.jpg" width="100%">
+        <img src="images/lol-7.jpg" width="100%">
+    </div>
+
+     <div class='dnSlide-main'>
+        <img src="images/wz-1.jpg" width="100%">
+        <img src="images/wz-2.jpg" width="100%">
+        <img src="images/wz-3.jpg" width="100%">
+        <img src="images/wz-4.jpg" width="100%">
+        <img src="images/wz-5.jpg" width="100%">
+        <img src="images/wz-6.jpg" width="100%">
+        <img src="images/wz-7.jpg" width="100%">
+    </div>
+
+    <script src="https://cdn.bootcss.com/jquery/1.12.0/jquery.min.js"></script>
+    <script src="js/dnSlide.js"></script>
+    <script>
+    jQuery(document).ready(function($) {
+
+        $(".dnSlide-main").each(function(index, el) {
+            var setting = {
+                "width" : 1200 ,
+                "height" : 234 ,
+                afterClickBtnFn :function(i){ console.log(i); },
+            };
+            switch (index) {
+                case 0:
+                    setting.verticalAlign = "top" ;
+                    var api = $(el).dnSlide(setting).data( "dnSlide" ); 
+                    $(".hide").on("click",function(){
+                        api.hide(function(){
+                            alert('已隐藏！！！');
+                        });
+                    });
+                    $(".show").on("click",function(){
+                        api.show(function(){
+                            alert('已显示！！！');
+                        });
+                    });
+                    break;
+                case 1:
+                    setting.autoPlay  =  true ;
+                    $(el).dnSlide(setting); 
+                    break;
+                case 2:
+                    setting.verticalAlign = "bottom" ;
+                    $(el).dnSlide(setting); 
+                    break;
+                default:
+                    $(el).dnSlide(setting); 
+                    break;
+            }
+        });
+    });
+    </script>
+    </body>
+</html>
+
