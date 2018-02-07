@@ -9,7 +9,7 @@ dnSlide is a beautiful Carousel slide effect.
 
 ## Demo
 
-[https://devin-huang.github.io/dnSlide/dist/](https://devin-huang.github.io/dnSlide/dist/)
+[https://devin-huang.github.io/dnSlide/dev/](https://devin-huang.github.io/dnSlide/dev/)
 
 [http://www.jq22.com/yanshi16788](http://www.jq22.com/yanshi16788)
 
