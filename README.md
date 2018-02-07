@@ -1,9 +1,16 @@
+# 个人博客
+
+[https://devin-huang.github.io/](https://devin-huang.github.io/)
+
 # dnSlide for jQuery plugin 
 dnSlide is a beautiful Carousel slide effect.
 
 ![](https://s3-us-west-1.amazonaws.com/images.gaatu.com/tpl/web/dnSlide-effect.jpg)
 
 ## Demo
+
+[https://devin-huang.github.io/dnSlide/dist/](https://devin-huang.github.io/dnSlide/dist/)
+
 [http://www.jq22.com/yanshi16788](http://www.jq22.com/yanshi16788)
 
 ## Dependencies
