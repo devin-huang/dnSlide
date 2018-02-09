@@ -1,6 +1,7 @@
 $zero : 0px;
 $wid  : 800px;
 $hei  : 234px;
+$precent   : 100%;
 $btn-hover : .5 .8; 
 $display   : block none ;
 
@@ -30,9 +31,27 @@ $display   : block none ;
   height: $hei;
   margin: 0px auto;
   visibility: hidden;
+  -webkit-tap-highlight-color:transparent;
 
   &.done{
     visibility: visible;
+  }
+
+  &.dn-response{
+    width:$precent;
+    .dnSlide-list{
+      width:$precent;
+      height:$precent;
+      padding-left:$zero;  
+
+      > .dnSlide-item {
+        &:first-child{
+
+          width:50%;
+          
+        }
+      }
+    } 
   }
 
   a{
@@ -78,6 +97,7 @@ $display   : block none ;
   @each $dir in $btn-dir{
     .dnSlide-#{$dir}-btn{
       background-image: url('../images/#{$dir}.png');
+      background-size: 25%;
       @if( $dir == left){
         left:0;
       }@else{

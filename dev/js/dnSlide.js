@@ -34,15 +34,17 @@
     $[_PLUGIN_].version = _VERSION_;
 
     $[_PLUGIN_].defaults = {
-        "isOddShow" : false ,          //偶数时是否复制一张，默认是需要复制防止错位
-        "width"     : 800,             //dnSlide Total Width
-        "height"    : 234,             //dnSlide Total Height
-        "dnSlideFirstWidth" : 600,      //First Picture Width
-        "dnSlideFirstHeight" : 234,     //First Picture Height
-        "autoPlay"  : false,
-        "delay"     : 5000,
-        "scale"     : 0.9,
-        "speed"     : 500,
+        "switch"    : "normal" ,
+        "isOddShow" : false ,           //偶数时是否复制一张，默认是需要复制防止错位
+        "width"     : 800 ,             //dnSlide Total Width
+        "height"    : 234 ,             //dnSlide Total Height
+        "dnSlideFirstWidth" : 600 ,      //First Picture Width
+        "dnSlideFirstHeight" : 234 ,     //First Picture Height
+        "autoPlay"  : false ,
+        "delay"     : 5000 ,
+        "scale"     : 0.9 ,
+        "speed"     : 500 ,
+        "response"  : false ,
         "verticalAlign" : "middle",
         "afterClickBtnFn" : null ,
     }; 
@@ -56,13 +58,16 @@
             this.settingDOM();  
             this.isIE7 = /MSIE 6.0|MSIE 7.0/gi.test(window.navigator.userAgent);
 
+
+            this.dnSlideMain = this.container.find('.dnSlide-main');
             this.dnSlideItems = this.container.find('ul.dnSlide-list');
             this.firstItem   = this.container.find('ul.dnSlide-list > li:first-child');
             this.dnSlideItemsLength = this.container.find('ul.dnSlide-list>li').length;
             this.dnSlideFirstItem = this.container.find('ul.dnSlide-list>li:first-child');
             this.dnSlideLastItem = this.container.find('ul.dnSlide-list>li:last-child');
             if(this.options.isOddShow) this.isEvenPicNum();
-            
+            if(this.options.response) this.container.addClass('dn-response');
+        
             this.prevBtn = this.container.find('.dnSlide-left-btn');
             this.nextBtn = this.container.find('.dnSlide-right-btn');
 
@@ -71,7 +76,7 @@
             this.rotateFlag = true;
 
             this.countSettingValue();
-            this.setPositionValue();
+            this.setPositionValue(); 
 
             this.prevBtn.off().on('click', function(event) {
                 event.stopPropagation();
@@ -90,6 +95,10 @@
                     _this_.dnSlideRotate('left') ;  
                 }
                 if( typeof afterClickNextBtn === "function" && afterClickNextBtn ) afterClickNextBtn();
+            });
+
+            $(window).resize(function(){
+                _this_.WndwResize()
             });
 
             if(this.options.autoPlay){
@@ -131,9 +140,22 @@
             var ulDOM = this.container.html('<ul class="dnSlide-list"></ul>').find('.dnSlide-list');
 
             jQuery.each(this.resourceSrcArr , function(i,e){
-                ulDOM.append('<li class="dnSlide-item"><a href="javascript:void(0)"><img src="'+_this_.resourceSrcArr[i]+'" width="100%"></a></li>');
+                ulDOM.append('<li class="dnSlide-item"><a href="javascript:void(0)"><img class="slide-img" src="'+_this_.resourceSrcArr[i]+'" width="100%"></a></li>');
             });
             ulDOM.parents('.dnSlide-main').append("<div class='dnSlide-btn dnSlide-left-btn'></div>","<div class='dnSlide-btn dnSlide-right-btn'></div>");
+        },
+        WndwResize : function(){
+            var _this_ = this ,
+                timeId = '';
+
+            if(timeId){
+                clearTimeout(timeId);
+                timeId = null ;
+            }
+            timeId = setTimeout(function(){
+                _this_.countSettingValue();
+                _this_.setPositionValue();
+            } , 250 );
         },
         //是否带有自定义设置
         getCustomSetting : function(){
@@ -146,44 +168,50 @@
         },
         //设置默认值主要是为了当用户修改默认属性后CSS也相对调整
         countSettingValue : function(){
+            var _this_    = this ,
+                response  = this.options.response ,
+                precent   = 100 + "%" ,
+                zIndex    = Math.floor(this.dnSlideItemsLength/2) ,
+                MainHei   = (response) ? this.dnSlideFirstItem.find(".slide-img").height() : this.options.height ,
+                MainWid   = (!response) ? this.options.width : null ,
+                FirstWid  = (!response) ? this.options.dnSlideFirstWidth : null ,
+                wid       = (response) ? (this.container.width() - this.firstItem.width())/2 : (this.options.width - this.options.dnSlideFirstWidth)/2;
+
             this.container.css({
-                "width": this.options.width,
-                "height": this.options.height
+                "width" : MainWid,
+                "height": MainHei
             });
-
             this.firstItem.css({
-                "width": this.options.dnSlideFirstWidth,
-                "height": this.options.dnSlideFirstHeight
+                "width" : FirstWid,
+                "height": (response) ? precent : this.options.dnSlideFirstHeight
             });
-
             this.prevBtn.css({
-                "width": (this.options.width - this.options.dnSlideFirstWidth)/2,
-                "height": this.options.height
+                "width" : wid,
+                "height": (response) ? precent : this.options.height
             });
-
             this.nextBtn.css({
-                "width": (this.options.width - this.options.dnSlideFirstWidth)/2,
-                "height": this.options.height
+                "width" : wid,
+                "height": (response) ? precent : this.options.height
             });
-
             this.dnSlideFirstItem.css({
-                "left": (this.options.width - this.options.dnSlideFirstWidth)/2,
-                "zIndex": Math.floor(this.dnSlideItemsLength/2)
+                "left"  : wid,
+                "zIndex": zIndex
             });
-
         },
         //设置默认加载进来时所有图片对应的位置
         setPositionValue : function(){
+
             var self_ = this ,
+                response  = this.options.response ,
                 level = Math.floor(this.dnSlideItemsLength/2) ,
                 items = this.container.find('.dnSlide-list > li').slice(1),
                 leftItems = items.slice( 0 , items.length/2 ),
                 rightItems = items.slice( items.length/2 ),
-                optionImgLeft = (this.options.width - this.options.dnSlideFirstWidth) / 2 ,
+                optionImgLeft = (response) ? (this.container.width() - this.firstItem.width())/2 : (this.options.width - this.options.dnSlideFirstWidth)/2 ,
                 gap = optionImgLeft / level,
-                dw = this.options.dnSlideFirstWidth,
-                dh = this.options.dnSlideFirstHeight;
- 
+                dw = (response) ? this.dnSlideFirstItem.width()  : this.options.dnSlideFirstWidth,
+                dh = (response) ? this.dnSlideFirstItem.height() : this.options.dnSlideFirstHeight;
+
             leftItems.each(function(i,e){
                 dw *= self_.options.scale;
                 dh *= self_.options.scale;
@@ -193,7 +221,7 @@
                     "height" : dh,
                     "zIndex" : --level, 
                     "opacity" : 1/(++j),
-                    "left" : optionImgLeft + self_.options.dnSlideFirstWidth + ((++i) * gap ) - dw ,
+                    "left" : optionImgLeft + self_.dnSlideFirstItem.width() + ((++i) * gap ) - dw ,
                     "top" :  self_.settingVerticalAlign(dh)
                 });
             });
@@ -220,15 +248,16 @@
         //设置垂直居中位置
         settingVerticalAlign : function(height){
             var verticalAlign = this.options.verticalAlign,
-                top;
+                top,
+                wid = (this.options.response) ? this.dnSlideFirstItem.find(".slide-img").height() : this.options.height;
             if( verticalAlign === 'middle' ){
-                top = (this.options.height - height) / 2;
+                top = ( wid - height) / 2;
             }else if( verticalAlign === 'top' ){
                 top = 0;
             }else if( verticalAlign === 'bottom' ){
-                top = (this.options.height - height);
+                top = (wid - height);
             }else{
-                top = (this.options.height - height) / 2;
+                top = (wid - height) / 2;
             }
             return top;
         },
