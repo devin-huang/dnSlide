@@ -1,9 +1,13 @@
 .dnSlide-main {
   position: relative;
+  visibility: hidden;
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
   width: 800px;
   height: 234px;
-  margin: 0px auto;
-  visibility: hidden;
+  margin-left: auto;
+  margin-right: auto;
   -webkit-tap-highlight-color: transparent;
 }
 .dnSlide-main.done {
@@ -15,10 +19,10 @@
 .dnSlide-main.dn-response .dnSlide-list {
   width: 100%;
   height: 100%;
+  margin: 0px;
+  margin-top: 35px;
+  margin-bottom: 35px;
   padding-left: 0px;
-}
-.dnSlide-main.dn-response .dnSlide-list > .dnSlide-item:first-child {
-  width: 50%;
 }
 .dnSlide-main a, .dnSlide-main img {
   display: block;
@@ -56,13 +60,28 @@
   left: 0px;
 }
 .dnSlide-main .dnSlide-left-btn {
-  background-image: url("../images/left.png");
-  background-size: 25%;
+  background-image: url("../images/left.svg");
+  background-size: 35%;
   left: 0;
 }
 .dnSlide-main .dnSlide-right-btn {
-  background-image: url("../images/right.png");
-  background-size: 25%;
+  background-image: url("../images/right.svg");
+  background-size: 35%;
   right: 0;
   left: auto;
+}
+
+@media \0screen\,screen\9 {
+  .dnSlide-main {
+    margin-top: 35px;
+    margin-bottom: 35px;
+  }
+
+  .dnSlide-main .dnSlide-right-btn {
+    background-image: url("../images/right.png");
+  }
+
+  .dnSlide-main .dnSlide-left-btn {
+    background-image: url("../images/left.png");
+  }
 }

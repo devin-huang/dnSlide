@@ -7,9 +7,14 @@
     </head>
     <link rel="stylesheet" type="text/css" href="css/dnSlide.css">
     <style>
+    html{
+        font-size: 20px;
+    }
+    body{
+        font-size: .7rem;
+    }
     .description {
-        font-size: 14px;
-        padding: 10px;
+        font-size: .65rem;
         background: yellow !important;
         border: thin solid #e2c420;
     }
@@ -18,20 +23,36 @@
     }
     body{
         max-width: 950px;
+        width: 950px;
         margin:0px auto;
+    }
+    p{
+        font-size: .65rem;
+        font-weight: bold;
     }
     </style>
     <body>
 
     <div class="description">
       <ul>
-        <li>支持响应式设计</li>
+        <li>响应式设计,图片等比例展示</li>
         <li>目前支持CHROME / FIREFOX / OPARE / IE6以上的版本</li>
         <li>个人博客:<a style="text-decoration: underline;color:red !important;" target="_blant" href="https://devin-huang.github.io/" title="devin">https://devin-huang.github.io/</a></li>
         <li>个人github:<a style="text-decoration: underline;color:red !important;" target="_blant" href="https://github.com/devin-huang" title="devin">https://github.com/devin-huang</a></li>
       </ul>
     </div>
+    <p>点击当前图设为展示图 / Click current Picture setting to show</p>
+     <div class='dnSlide-main'>
+        <img src="images/web-front/web-1.jpg" width="100%">
+        <img src="images/web-front/web-2.jpg" width="100%">
+        <img src="images/web-front/web-3.jpg" width="100%">
+        <img src="images/web-front/web-4.jpg" width="100%">
+        <img src="images/web-front/web-5.jpg" width="100%">
+        <img src="images/web-front/web-6.jpg" width="100%">
+        <img src="images/web-front/web-7.jpg" width="100%">
+    </div>
 
+    <p>自动轮播 / automatic carousel</p>
     <div class='dnSlide-main'>
         <img src="images/sea/sea-1.jpg" width="100%">
         <img src="images/sea/sea-2.jpg" width="100%">
@@ -41,59 +62,52 @@
         <img src="images/sea/sea-6.jpg" width="100%">
         <img src="images/sea/sea-7.jpg" width="100%">
     </div>
-    <button class="show" type="button">显示</button>
-    <button class="hide" type="button">隐藏</button>
+    <button class="show" type="button">SHOW</button>
+    <button class="hide" type="button">HIDEEN</button>
 
-      <div class='dnSlide-main'>
-        <img src="images/spring/spring-1.jpg" width="100%">
-        <img src="images/spring/spring-2.jpg" width="100%">
-        <img src="images/spring/spring-3.jpg" width="100%">
-        <img src="images/spring/spring-4.jpg" width="100%">
-        <img src="images/spring/spring-5.jpg" width="100%">
-        <img src="images/spring/spring-6.jpg" width="100%">
-        <img src="images/spring/spring-1.jpg" width="100%">
-        <img src="images/spring/spring-2.jpg" width="100%">
-        <img src="images/spring/spring-3.jpg" width="100%">
-        <img src="images/spring/spring-4.jpg" width="100%">
-        <img src="images/spring/spring-5.jpg" width="100%">
-        <img src="images/spring/spring-6.jpg" width="100%">
-        <img src="images/spring/spring-7.jpg" width="100%">
+    <p>点击按钮逐一展示 / Click button to display one by one </p>
+    <div class='dnSlide-main'>
+        <img src="images/seasion/spring-1.jpg" width="100%">
+        <img src="images/seasion/spring-2.jpg" width="100%">
+        <img src="images/seasion/spring-3.jpg" width="100%">
+        <img src="images/seasion/spring-4.jpg" width="100%">
+        <img src="images/seasion/spring-5.jpg" width="100%">
+        <img src="images/seasion/spring-6.jpg" width="100%">
+        <img src="images/seasion/spring-7.jpg" width="100%">
+        <img src="images/seasion/spring-8.jpg" width="100%">
+        <img src="images/seasion/spring-9.jpg" width="100%">
+        <img src="images/seasion/spring-10.jpg" width="100%">
+        <img src="images/seasion/spring-11.jpg" width="100%">
+        <img src="images/seasion/spring-12.jpg" width="100%">
+        <img src="images/seasion/spring-13.jpg" width="100%">
     </div>
-
-     <div class='dnSlide-main'>
-        <img src="images/autumn/autumn-1.jpg" width="100%">
-        <img src="images/autumn/autumn-2.jpg" width="100%">
-        <img src="images/autumn/autumn-3.jpg" width="100%">
-        <img src="images/autumn/autumn-4.jpg" width="100%">
-        <img src="images/autumn/autumn-5.jpg" width="100%">
-        <img src="images/autumn/autumn-6.jpg" width="100%">
-        <img src="images/autumn/autumn-7.jpg" width="100%">
-    </div> 
 
     <script src="https://cdn.bootcss.com/jquery/1.12.0/jquery.min.js"></script>
     <script src="js/dnSlide.js"></script>
+    <script src="js/expandJS.js"></script>
     <script>
+
     jQuery(document).ready(function($) {
 
         $(".dnSlide-main").each(function(index, el) {
             var setting = {
-                "width" : 1200 ,
-                "height" : 234 ,
                 "response" : true ,
-                afterClickBtnFn :function(i){ console.log(i); },
+                afterClickBtnFn :function(i){ console.log(i); }
             };
             switch (index) {
                 case 0:
                     setting.verticalAlign = "top" ;
+                    setting.switching     = "custom" ;
+                    setting.precentWidth  = "25%" ;
                     var api = $(el).dnSlide(setting).data( "dnSlide" ); 
                     $(".hide").on("click",function(){
                         api.hide(function(){
-                            alert('已隐藏！！！');
+                            alert('HIDEEN！！！');
                         });
                     });
                     $(".show").on("click",function(){
                         api.show(function(){
-                            alert('已显示！！！');
+                            alert('SHOW！！！');
                         });
                     });
                     break;

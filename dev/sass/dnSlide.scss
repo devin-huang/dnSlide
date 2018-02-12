@@ -20,6 +20,13 @@ $display   : block none ;
   background-position: center center;
 }
 
+@mixin defaultSet(){
+  visibility: hidden;
+  padding:0px;
+  margin:0px;
+  list-style: none;
+}
+
 @mixin animate($opacity , $time){
   transition: $opacity $time; 
 }
@@ -27,10 +34,11 @@ $display   : block none ;
 .dnSlide-main{
 
   @include direction(relative);
+  @include defaultSet();
   width:$wid;
   height: $hei;
-  margin: 0px auto;
-  visibility: hidden;
+  margin-left:auto;
+  margin-right:auto;
   -webkit-tap-highlight-color:transparent;
 
   &.done{
@@ -42,15 +50,10 @@ $display   : block none ;
     .dnSlide-list{
       width:$precent;
       height:$precent;
+      margin:$zero; 
+      margin-top: 35px;
+      margin-bottom: 35px;
       padding-left:$zero;  
-
-      > .dnSlide-item {
-        &:first-child{
-
-          width:50%;
-          
-        }
-      }
     } 
   }
 
@@ -96,8 +99,8 @@ $display   : block none ;
   $btn-dir:left, right;
   @each $dir in $btn-dir{
     .dnSlide-#{$dir}-btn{
-      background-image: url('../images/#{$dir}.png');
-      background-size: 25%;
+      background-image: url('../images/#{$dir}.svg');
+      background-size: 35%;
       @if( $dir == left){
         left:0;
       }@else{
@@ -105,5 +108,18 @@ $display   : block none ;
         left:auto;
       }
     }
+  }
+}
+
+@media \0screen\,screen\9{
+  .dnSlide-main{
+    margin-top: 35px;
+    margin-bottom: 35px;
+  }
+  .dnSlide-main .dnSlide-right-btn{
+    background-image: url('../images/right.png');
+  }
+  .dnSlide-main .dnSlide-left-btn{
+    background-image: url('../images/left.png');
   }
 }

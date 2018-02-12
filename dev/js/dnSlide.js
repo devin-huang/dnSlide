@@ -1,3 +1,10 @@
+/**
+ * Slide JQUERY PLUGIN
+ *
+ * @author  Devin Huang
+ * @version 1.2.0
+ */
+
 (function (factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as anonymous module.
@@ -34,19 +41,15 @@
     $[_PLUGIN_].version = _VERSION_;
 
     $[_PLUGIN_].defaults = {
-        "switch"    : "normal" ,
-        "isOddShow" : false ,           //偶数时是否复制一张，默认是需要复制防止错位
-        "width"     : 800 ,             //dnSlide Total Width
-        "height"    : 234 ,             //dnSlide Total Height
-        "dnSlideFirstWidth" : 600 ,      //First Picture Width
-        "dnSlideFirstHeight" : 234 ,     //First Picture Height
+        "switching"    : "normal" ,         //custom
+        "isOddShow" : false ,            //偶数时是否复制一张，默认是需要复制防止错位
+        "precentWidth" : "50%" ,
         "autoPlay"  : false ,
         "delay"     : 5000 ,
         "scale"     : 0.9 ,
         "speed"     : 500 ,
-        "response"  : false ,
         "verticalAlign" : "middle",
-        "afterClickBtnFn" : null ,
+        "afterClickBtnFn" : null 
     }; 
 
     /* Prototype Function */
@@ -58,9 +61,9 @@
             this.settingDOM();  
             this.isIE7 = /MSIE 6.0|MSIE 7.0/gi.test(window.navigator.userAgent);
 
-
             this.dnSlideMain = this.container.find('.dnSlide-main');
             this.dnSlideItems = this.container.find('ul.dnSlide-list');
+            this.dnSlideLi = this.container.find('.dnSlide-item');
             this.firstItem   = this.container.find('ul.dnSlide-list > li:first-child');
             this.dnSlideItemsLength = this.container.find('ul.dnSlide-list>li').length;
             this.dnSlideFirstItem = this.container.find('ul.dnSlide-list>li:first-child');
@@ -75,9 +78,29 @@
             this.nextBtn =  this.container.find('div.dnSlide-right-btn');
             this.rotateFlag = true;
 
+            //DEFAULT SETTING START
+            this.clearLiStyle();
             this.countSettingValue();
             this.setPositionValue(); 
+            this.setDefaultLiJson();
 
+            if(this.options.switching === "custom"){
+                this.dnSlideLi.off().on("click",function(){
+                    _this_.clickCurrentLI($(this).index());
+                });
+            }
+            
+            if(this.options.autoPlay){
+                this.autoPlay();
+                this.container.hover(function(){
+                    clearTimeout(_this_.timer);
+                },function(){
+                    _this_.autoPlay();
+                });
+            }
+            //DEFAULT SETTING END
+
+            // EVENTS START
             this.prevBtn.off().on('click', function(event) {
                 event.stopPropagation();
                 var afterClickPrevBtn = _this_.options.afterClickPrevBtnFn;
@@ -98,24 +121,17 @@
             });
 
             $(window).resize(function(){
-                _this_.WndwResize()
+                _this_.WndwResize();
             });
+            // EVENTS END
 
-            if(this.options.autoPlay){
-                this.autoPlay();
-                this.container.hover(function(){
-                    clearTimeout(_this_.timer);
-                },function(){
-                    _this_.autoPlay();
-                });
-            }
         },
         data : function(){
             var data = this.container.data(_PLUGIN_);   
             if(!data ) {
                 this.container.data(_PLUGIN_, {
-                   target : this.container,
-                });
+                   target : this.container
+                })
             }
         },
         destroy : function()
@@ -133,7 +149,9 @@
             if( callback && typeof callback === "function" ) callback();
         },    
         settingDOM : function (){
-            var _this_ = this ;
+            var _this_  = this ,
+                btnHTML = (this.options.switching === "normal") ? "<div class='dnSlide-btn dnSlide-left-btn'></div><div class='dnSlide-btn dnSlide-right-btn'></div>" : null ;
+
             this.defalutHtml = this.container.html();
 
             this.resourceSrcArr = this.container.find('img').map(function(i,e){return e.src;});
@@ -142,7 +160,8 @@
             jQuery.each(this.resourceSrcArr , function(i,e){
                 ulDOM.append('<li class="dnSlide-item"><a href="javascript:void(0)"><img class="slide-img" src="'+_this_.resourceSrcArr[i]+'" width="100%"></a></li>');
             });
-            ulDOM.parents('.dnSlide-main').append("<div class='dnSlide-btn dnSlide-left-btn'></div>","<div class='dnSlide-btn dnSlide-right-btn'></div>");
+
+            ulDOM.parents('.dnSlide-main').append(btnHTML);
         },
         WndwResize : function(){
             var _this_ = this ,
@@ -153,8 +172,10 @@
                 timeId = null ;
             }
             timeId = setTimeout(function(){
+                _this_.clearLiStyle();
                 _this_.countSettingValue();
                 _this_.setPositionValue();
+                _this_.setDefaultLiJson();
             } , 250 );
         },
         //是否带有自定义设置
@@ -166,35 +187,41 @@
                 return {};
             }
         },
+        clearLiStyle : function(){
+            this.dnSlideLi.attr("style","");
+        },
         //设置默认值主要是为了当用户修改默认属性后CSS也相对调整
         countSettingValue : function(){
             var _this_    = this ,
                 response  = this.options.response ,
                 precent   = 100 + "%" ,
-                zIndex    = Math.floor(this.dnSlideItemsLength/2) ,
-                MainHei   = (response) ? this.dnSlideFirstItem.find(".slide-img").height() : this.options.height ,
-                MainWid   = (!response) ? this.options.width : null ,
-                FirstWid  = (!response) ? this.options.dnSlideFirstWidth : null ,
-                wid       = (response) ? (this.container.width() - this.firstItem.width())/2 : (this.options.width - this.options.dnSlideFirstWidth)/2;
+                zIndex    = Math.floor(this.dnSlideItemsLength/2) ;
+
+            this.firstItem.css({
+                "width" : this.dnSlideItems.width() * (parseFloat(this.options.precentWidth.replace("px",""))/100)
+            });
+
+            this.firstItem.css({
+                "height": this.dnSlideFirstItem.find(".slide-img").height()
+            });
 
             this.container.css({
-                "width" : MainWid,
-                "height": MainHei
+                "width" : null,
+                "height": this.dnSlideFirstItem.find(".slide-img").height()
             });
-            this.firstItem.css({
-                "width" : FirstWid,
-                "height": (response) ? precent : this.options.dnSlideFirstHeight
-            });
+
             this.prevBtn.css({
-                "width" : wid,
-                "height": (response) ? precent : this.options.height
+                "width" : (this.container.width() - this.firstItem.width())/2 ,
+                "height": precent 
             });
+
             this.nextBtn.css({
-                "width" : wid,
-                "height": (response) ? precent : this.options.height
+                "width" : (this.container.width() - this.firstItem.width())/2 ,
+                "height": precent 
             });
+
             this.dnSlideFirstItem.css({
-                "left"  : wid,
+                "left"  : (this.container.width() - this.firstItem.width())/2 ,
                 "zIndex": zIndex
             });
         },
@@ -207,22 +234,22 @@
                 items = this.container.find('.dnSlide-list > li').slice(1),
                 leftItems = items.slice( 0 , items.length/2 ),
                 rightItems = items.slice( items.length/2 ),
-                optionImgLeft = (response) ? (this.container.width() - this.firstItem.width())/2 : (this.options.width - this.options.dnSlideFirstWidth)/2 ,
+                optionImgLeft = (this.container.width() - this.firstItem.width())/2 ,
                 gap = optionImgLeft / level,
-                dw = (response) ? this.dnSlideFirstItem.width()  : this.options.dnSlideFirstWidth,
-                dh = (response) ? this.dnSlideFirstItem.height() : this.options.dnSlideFirstHeight;
+                dw = this.dnSlideFirstItem.width()  ,
+                dh = this.dnSlideFirstItem.height() ;
 
             leftItems.each(function(i,e){
                 dw *= self_.options.scale;
                 dh *= self_.options.scale;
                 var j = i ;
                 $(e).css({
-                    "width" : dw,
+                    "width"  : dw,
                     "height" : dh,
-                    "zIndex" : --level, 
+                    "zIndex"  : --level, 
                     "opacity" : 1/(++j),
                     "left" : optionImgLeft + self_.dnSlideFirstItem.width() + ((++i) * gap ) - dw ,
-                    "top" :  self_.settingVerticalAlign(dh)
+                    "top"  :  self_.settingVerticalAlign(dh)
                 });
             });
 
@@ -233,12 +260,12 @@
             rightItems.each(function(i,e){
 
                 $(e).css({
-                    "width" : rw,
+                    "width"  : rw,
                     "height" : rh,
                     "zIndex" : level++, 
                     "opacity" : 1 / oloop--,
                     "left" : gap*i ,
-                    "top" :  self_.settingVerticalAlign(rh)
+                    "top"  :  self_.settingVerticalAlign(rh)
                 });
                 rw = rw / self_.options.scale;
                 rh = rh / self_.options.scale;
@@ -249,7 +276,7 @@
         settingVerticalAlign : function(height){
             var verticalAlign = this.options.verticalAlign,
                 top,
-                wid = (this.options.response) ? this.dnSlideFirstItem.find(".slide-img").height() : this.options.height;
+                wid = this.dnSlideFirstItem.find(".slide-img").height() ;
             if( verticalAlign === 'middle' ){
                 top = ( wid - height) / 2;
             }else if( verticalAlign === 'top' ){
@@ -324,6 +351,37 @@
             var i   =  jQuery.inArray(max,arr);
             this.options.afterClickBtnFn.apply(this,[i]);
         },
+        setDefaultLiJson : function(){
+            this.setliArr = this.dnSlideLi.map(function(i,e){ 
+                        var arr = [];
+                        arr.push({ 
+                            "width"   : $(e).css("width") ,
+                            "height"  : $(e).css("height") ,
+                            "opacity" : $(e).css("opacity") ,
+                            "z-index" : $(e).css("z-index") ,
+                            "left"    : $(e).css("left") ,
+                            "top"     : $(e).css("top") ,
+                            "current" : i
+                        });
+                        return arr; 
+                    }).get();
+        },
+        clickCurrentLI: function(index){
+            var _this_  = this ,
+                li       = this.dnSlideLi , 
+                indexArr = li.map(function(i){ return $(this).index(); }).get() ,
+                thisArr = indexArr ,
+                cutArr = thisArr.splice( thisArr.indexOf(index) ,  _this_.dnSlideItemsLength );
+
+                _this_.rotateFlag = false;
+                cutArr.reverse().forEach(function(e,i){
+                    thisArr.unshift(cutArr[i]);
+                });              
+                this.setliArr.forEach(function(e,i){
+                    e.index = indexArr[i];
+                    li.eq(_this_.setliArr[i].index).css("zIndex",_this_.setliArr[i]["z-index"]).animate(_this_.setliArr[i] , function(){ _this_.rotateFlag = false; });
+                });
+        },
         //是否自动播放
         autoPlay : function(){ 
             var self_ = this;
@@ -357,8 +415,8 @@
                 }
             );
             return api;
-        },
-    };
+        }
+    }
 
     /* The jQuery plugin */
     $.fn[_PLUGIN_] = function(options){
