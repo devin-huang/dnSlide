@@ -5,7 +5,7 @@
 # dnSlide for jQuery plugin 
 dnSlide is a beautiful Carousel slide effect.
 
-![](https://s3-us-west-1.amazonaws.com/images.gaatu.com/tpl/web/dnSlide-effect.jpg)
+![](https://s3-us-west-1.amazonaws.com/images.gaatu.com/tpl/web/20180212dnSlide-effect.jpg)
 
 ## Demo
 
@@ -19,7 +19,7 @@ dnSlide is a beautiful Carousel slide effect.
 
 ## options
 
-![](https://s3-us-west-1.amazonaws.com/images.gaatu.com/tpl/web/dnSlide-options.jpg)
+![](https://s3-us-west-1.amazonaws.com/images.gaatu.com/tpl/web/20180213dnSlide-options.jpg)
 
 ## API
 
